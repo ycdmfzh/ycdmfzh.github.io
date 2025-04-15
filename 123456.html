@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>某某品牌售后反馈评价</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --text-dark: #333333;
+            --text-medium: #666666;
+            --text-light: #999999;
+            --border-color: #f0f0f0;
+            --card-bg: #ffffff;
+            --primary-color: #ff8200;
+            --primary-light: #fff5eb;
+            --secondary-color: #4a90e2;
+            --success-color: #52c41a;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background-color: #f9f9f9;
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* 头部区域 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #ff8200, #ffcc00);
+            border-radius: 3px;
+        }
+
+        h1 {
+            color: #222222;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .description {
+            color: var(--text-medium);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* 事件概览卡片 */
+        .overview-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff8200, #ffcc00);
+        }
+
+        .overview-content {
+            padding-left: 15px;
+        }
+
+        .overview-card p {
+            color: var(--text-medium);
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .overview-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 微博卡片样式 */
+        .weibo-card {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .weibo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .weibo-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), #ffcc00);
+            border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+            border: 2px solid rgba(255, 130, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .user-meta {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222222;
+            margin-bottom: 2px;
+        }
+
+        .user-handle {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .weibo-content {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            padding-left: 56px; /* 头像宽度 + margin */
+        }
+
+        .weibo-time {
+            color: var(--text-light);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            padding-left: 56px;
+        }
+
+        .weibo-time::before {
+            content: "•";
+            margin: 0 6px;
+            color: var(--border-color);
+        }
+
+        /* 加载更多按钮 */
+        .load-more {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .load-more-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 130, 0, 0.2);
+        }
+
+        .load-more-btn:hover {
+            background-color: #ff6f00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 130, 0, 0.3);
+        }
+
+        .load-more-btn i {
+            margin-left: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .load-more-btn:hover i {
+            transform: translateX(3px);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+          
+            h1 {
+                font-size: 24px;
+            }
+          
+            .weibo-content {
+                padding-left: 0;
+            }
+          
+            .weibo-time {
+                padding-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>某某品牌售后反馈评价</h1>
+            <div class="description">基于真实消费者体验整理的50条售后处理评价</div>
+        </div>
+
+        <div class="overview-card">
+            <div class="overview-content">
+                <p>近期品牌主动公示某批次产品存在潜在质量问题，第一时间启动全国召回程序。CEO亲自召开新闻发布会向公众道歉，并承诺为所有受影响用户提供免费退换货服务。</p>
+                <p>售后服务团队全员待命，开通24小时专属热线，确保每位消费者的诉求能得到及时响应。以下是我们收集整理的消费者真实反馈。</p>
+            </div>
+        </div>
+
+        <!-- 微博内容区域 -->
+        <div id="weibo-container"></div>
+
+        <div class="load-more">
+            <button class="load-more-btn">查看完整报告 <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // 使用国内稳定头像API (卡通形象)
+        const avatarAPI = "https://api.uomg.com/api/rand.avatar?sort=%E7%B2%89%E4%B8%9D&format=images";
+      
+        // 中文随机用户名库 (增加更多职业和城市)
+        const usernames = [
+            "北京设计师张", "上海HR李女士", "广州程序员小王", "深圳产品经理赵", "成都教师刘老师",
+            "杭州运营陈小姐", "南京医生吴大夫", "武汉工程师周工", "西安教授郑教授", "长沙律师林律师",
+            "重庆销售黄经理", "天津学生孙同学", "苏州会计杨女士", "厦门导游高导", "青岛厨师冯师傅",
+            "大连护士秦护士", "宁波教师朱老师", "合肥设计师何", "沈阳工程师马工", "郑州运营宋小姐",
+            "哈尔滨学生邓同学", "石家庄医生毛大夫", "太原教师林老师", "长春会计徐会计", "济南记者白记者"
+        ];
+
+        // 精选50条固定评论内容 (重新分类整理)
+        const fixedComments = [
+            // 服务响应类
+                 "售后响应速度很快，昨天申请的今天就收到了取件通知",
+            "客服态度很好，全程耐心解答我的问题",
+            "退换货流程比想象中简单，操作指引很清晰",
+            "补偿方案很合理，对这种处理方式感到满意",
+            "看到CEO亲自道歉视频，感受到了品牌的诚意",
+            "上门取件服务非常准时，没有额外收费",
+            "全新的替换产品已经使用三天，目前一切正常",
+            "客服主动告知赔偿流程，不用我反复追问",
+            "退货款三天就到账了，比承诺的时间还快",
+            "售后专员详细解释了产品使用注意事项",
+            "虽然是产品问题，但这种售后态度我可以接受",
+            "接到了三次回访电话，询问对处理是否满意",
+            "补偿的礼品很实用，比预期的要好",
+            "整个过程都在APP上能看到进度，很透明",
+            "客服电话一打就通，没有漫长的等待",
+            "附近的直营店直接办理了退款，很方便",
+            "售后服务值得点赞，希望加强品控",
+            "虽然出了状况，但处理结果令人欣慰",
+            "线上提交申请后半小时就有客服联系我",
+            "退换货没有任何推诿，直接办理",
+            "快递员上门时非常专业，包装很仔细",
+            "客服能准确说出我购买的产品信息",
+            "退换货政策很人性化，考虑得很周到",
+            "400热线的工作人员业务很熟练",
+            "售后服务让我对品牌恢复了信心",
+            "门店的员工态度友善，效率很高",
+            "问题处理得比较彻底，不是敷衍了事",
+            "补偿金额超过了我的预期，挺意外的",
+            "收到了邮件确认函，所有步骤记录清晰",
+            "技术人员上门检测很认真，还给了使用建议",
+            "这次售后体验反而让我更信任这个品牌了",
+            "客服主动提供了多个解决方案让我选择",
+            "社交媒体上的投诉24小时内就有回复",
+            "客服主管亲自跟进我的case，很重视",
+            "退款不需要寄回赠品，这点很贴心",
+            "整个处理流程都很正规，没有猫腻",
+            "微信公众号的人工客服回复很快",
+            "售后团队专业度高，沟通很顺畅",
+            "不仅处理了问题产品，还检查了其他同类产品",
+            "客服能够理解我的顾虑，解释得很到位",
+            "退货快递用的都是顺丰，速度很快",
+            "售后人员主动告知后续使用注意事项",
+            "门店经理亲自接待并道歉，态度诚恳",
+            "从问题反馈到解决只用了48小时",
+            "线上申请的退款第二天就到账了",
+            "客服能够用通俗易懂的语言解释技术问题",
+            "邮件通知和短信提醒都非常及时",
+            "售后服务流程标准统一，各个渠道都一样",
+            "处理过程中没有任何推卸责任的情况",
+            "最终解决方案让我们全家都感到满意"
+        ];
+        // 生成固定50条微博数据
+        function generateFixedWeibos() {
+            const weibos = [];
+            
+            for(let i = 0; i < 50; i++) {
+                const username = usernames[i % usernames.length] || `消费者${i+1}`;
+                const userId = 1000000 + i;
+                const content = fixedComments[i];
+                
+                // 生成相对更真实的时间分布
+                let timeText;
+                if(i < 15) {  // 30% 1天内
+                    const hours = Math.floor(Math.random() * 24);
+                    timeText = hours > 0 ? `${hours}小时前` : "刚刚";
+                } else if(i < 35) {  // 40% 1-7天
+                    const days = Math.floor(Math.random() * 7) + 1;
+                    timeText = `${days}天前`;
+                } else {  // 30% 1-4周
+                    const weeks = Math.floor(Math.random() * 4) + 1;
+                    timeText = `${weeks}周前`;
+                }
+                
+                weibos.push({
+                    username,
+                    userId,
+                    content,
+                    timeText
+                });
+            }
+            
+            return weibos;
+        }
+        // 生成微博卡片HTML
+        function createWeiboCard(weibo) {
+            return `
+                <div class="weibo-card">
+                    <div class="user-info">
+                        <img src="${avatarAPI}&id=${weibo.userId}&t=${Date.now()}" class="avatar" alt="用户头像">
+                        <div>
+                            <div class="user-name">
+                                ${weibo.username}
+                            </div>
+                            <div class="user-handle">@user_${weibo.userId}</div>
+                        </div>
+                    </div>
+                    <div class="weibo-content">${weibo.content}</div>
+                    <div class="weibo-time">${weibo.timeText}</div>
+                </div>
+            `;
+        }
+        // 渲染50条固定微博
+        const weibos = generateFixedWeibos();
+        const weiboContainer = document.getElementById('weibo-container');
+        weiboContainer.innerHTML = weibos.map(weibo => createWeiboCard(weibo)).join('');
+        
+        // 防止头像缓存
+        setInterval(() => {
+            document.querySelectorAll('.avatar').forEach(img => {
+                img.src = `${avatarAPI}&id=${img.src.split('id=')[1].split('&')[0]}&t=${Date.now()}`;
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
