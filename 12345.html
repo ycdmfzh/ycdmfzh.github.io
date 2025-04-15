@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微博广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --text-dark: #333;
+            --text-light: #999;
+            --border-color: #e6e6e6;
+            --card-bg: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background-color: #f6f6f6;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        /* 微博卡片 */
+        .weibo-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .user-name {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .user-handle {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .weibo-content {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .weibo-time {
+            color: var(--text-light);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 微博内容区域 -->
+        <div id="weibo-container"></div>
+    </div>
+
+    <script>
+        // 使用Unsplash随机头像API
+        const avatarAPI = "https://source.unsplash.com/random/300x300/?portrait,face";
+
+        // 中文随机用户名库
+        const usernames = [
+            "旅行家小王", "美食达人Jenny", "科技爱好者Leo", "摄影师陈大伟", "健身教练阿力",
+            "读书笔记", "电影迷汤圆", "都市生活志", "时尚芭莎", "汽车评测员",
+            "投资小能手", "育儿百科", "留学日记", "数码控", "美妆教主"
+        ];
+
+        // 随机微博内容
+        const weiboContents = [
+            "某品牌这次事件处理得很及时，虽然产品出了问题，但售后态度值得肯定，希望今后能加强质量把控！",
+            "刚收到客服电话，说我可以直接去附近门店退换货，不用等快递来取，这服务可以啊！",
+            "看了CEO的道歉视频，挺诚恳的，其实哪个品牌不出问题呢？关键看怎么应对。",
+            "已经使用退换货服务了，整个过程比想象的顺利很多，从申请到退款到账只用了24小时，这点要给个好评！",
+            "建议大家检查下自己家的产品批次号，官网上可以查询是否在召回范围内，安全第一啊朋友们",
+            "对比了几个同类型产品，其实各家都有优缺点，关键是出了问题后企业的态度和解决方案。",
+            "刚收到补偿礼品，是一个高级收纳包，价值不菲啊，这波售后真的用心了！",
+            "作为老用户说句公道话：用了5年他们家的产品，这次是第一次遇到问题，但处理方式让我决定继续支持。",
+            "退换货流程攻略：1.拨打400电话 2.提供购买凭证 3.选择上门取件或到店办理 4.3个工作日内退款。分享给需要的人～",
+            "看到很多人在喷这个品牌，其实人家反应已经很快了，你们知道有些国际大牌出问题后都是怎么敷衍消费者的吗？",
+            "客服小姐姐态度超级好！耐心解释了召回原因，还提醒我如何使用其他型号产品更安全，专业",
+            "第三方检测报告出来了，问题确实存在但属于极端情况下才会触发，日常使用其实风险很低，大家不用太恐慌。"
+        ];
+
+        // 生成随机用户数据
+        function generateRandomWeibo() {
+            const username = usernames[Math.floor(Math.random() * usernames.length)];
+            const userId = Math.floor(Math.random() * 10000000);
+            const content = weiboContents[Math.floor(Math.random() * weiboContents.length)];
+            
+            // 生成随机时间
+            let timeAgo, formattedTime;
+            if(Math.random() > 0.7) {
+                const daysAgo = Math.floor(Math.random() * 7);
+                formattedTime = `${daysAgo}天前`;
+            } else {
+                timeAgo = Math.floor(Math.random() * 60 * 24); // 0-1439分钟
+                formattedTime = timeAgo > 60 ? `${Math.floor(timeAgo/60)}小时前` : `${timeAgo}分钟前`;
+            }
+
+            return {
+                username,
+                userId,
+                content,
+                formattedTime
+            };
+        }
+
+        // 生成微博卡片HTML
+        function createWeiboCard(weibo) {
+            return `
+                <div class="weibo-card">
+                    <div class="user-info">
+                        <img src="${avatarAPI}&id=${weibo.userId}" class="avatar">
+                        <div>
+                            <div class="user-name">
+                                ${weibo.username}
+                            </div>
+                            <div class="user-handle">@user_${weibo.userId}</div>
+                        </div>
+                    </div>
+                    <div class="weibo-content">${weibo.content}</div>
+                    <div class="weibo-time">${weibo.formattedTime}</div>
+                </div>
+            `;
+        }
+
+        // 渲染15条随机微博
+        const weiboContainer = document.getElementById('weibo-container');
+        for(let i = 0; i < 15; i++) {
+            const weibo = generateRandomWeibo();
+            weiboContainer.innerHTML += createWeiboCard(weibo);
+        }
+    </script>
+</body>
+</html>
