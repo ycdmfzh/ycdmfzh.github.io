@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>某某品牌事件讨论区</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1da1f2;
+            --negative-color: #ff4d4d;
+            --positive-color: #17bf63;
+            --dark-bg: #15202b;
+            --light-bg: #f7f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #0f1419;
+            --text-light: #5b7083;
+        }
+
+        body {
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+        header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e6ecf0;
+            background: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .event-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .event-card.negative {
+            border-top: 4px solid var(--negative-color);
+        }
+
+        .event-card.positive {
+            border-top: 4px solid var(--positive-color);
+        }
+
+        .event-title {
+            font-size: 1.3rem;
+            margin: 0 0 15px;
+            color: var(--text-dark);
+        }
+
+        .event-content {
+            color: var(--text-dark);
+            white-space: pre-line;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .badge-hot {
+            background-color: #ffebe9;
+            color: #cf222e;
+        }
+
+        .comment-section {
+            margin-top: 30px;
+        }
+
+        .comment-count {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-count i {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .comments {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .comment-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .comment-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .comment-user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #1da1f2, #17bf63);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .username {
+            font-weight: 700;
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .user-handle {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .comment-time {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .comment-text {
+            margin: 10px 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .comment-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .action-icon {
+            margin-right: 5px;
+        }
+
+        .like-count {
+            color: var(--text-light);
+            font-weight: normal;
+        }
+
+        .verified-badge {
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        .pinned-comment {
+            position: relative;
+            background: #f7fbfd;
+            border: 1px solid #e1e8ed;
+        }
+
+        .pinned-sign {
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .comment-input {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .input-field {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            float: right;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0;
+            }
+            
+            .comment-actions {
+                justify-content: space-between;
+            }
+            
+            .action-btn {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="header-title">某某品牌事件讨论区</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="event-card negative">
+            <h2 class="event-title">事件背景</h2>
+            <div class="event-content">
+                近期，某某品牌某型号产品被检测出存在安全隐患问题。根据监管部门披露的信息显示，该产品在极端使用条件下可能存在过热风险。品牌方已启动召回程序，承诺为所有受影响用户提供免费退换服务。
+
+事件曝光后，品牌方在24小时内召开新闻发布会，首席执行官亲自致歉，并公布了详细的改进方案。目前第三方检测机构已介入调查，最新进展可通过品牌官网查询。
+            </div>
+            <div>
+                <span class="badge badge-hot"><i class="fas fa-fire"></i> 热点话题</span>
+                <span class="badge"><i class="fas fa-user"></i> 126,578人讨论</span>
+            </div>
+        </div>
+
+        <div class="comment-section">
+            <div class="comment-count">
+                <i class="fas fa-comment-alt"></i> 热门评论（精选50条）
+            </div>
+
+            <div class="comments" id="comments">
+                <!-- 评论通过JavaScript生成 -->
+            </div>
+
+            <div class="comment-input">
+                <h3>发表你的看法</h3>
+                <textarea class="input-field" placeholder="在这个事件中你有何想法..."></textarea>
+                <button class="submit-btn">发布评论</button>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 更真实的用户数据生成
+        const comments = [];
+        
+        const usernames = [
+            "科技达人", "消费维权", "数码爱好者", "产品体验官", "理性消费者", 
+            "行业观察", "质量检测员", "老用户", "资深粉丝", "路人甲",
+            "市场分析师", "产品经理", "工程师", "消费者", "媒体记者"
+        ];
+        
+        const suffixes = ["_22", "_tech", "_official", "", "2023", "点评", "说", "爆料", "分享"];
+        
+        const positiveTemplates = [
+            "虽然遇到问题，但客服处理非常专业，值得肯定 🙌",
+            "品牌响应速度超出预期，继续支持 💪 希望以后能加强品控",
+            "使用了三年这个品牌，这次事件处理让我更有信心了~",
+            "退换流程比想象中简单，从申请到退款只用了1天时间 🚀",
+            "看到CEO直接出来道歉，这份诚意我愿意买单！👍",
+            "工作人员上门取货的时候态度很好，还送了小礼品补偿",
+            "全程都有短信提醒进度，服务很贴心 #细节决定成败#",
+            "产品虽然有问题，但售后保障确实做到了，这点要给个好评 ⭐️⭐️⭐️⭐️⭐️",
+            "补偿方案超出预期，包括运费都报销了，处理满意 💯",
+            "从这次危机公关能看出品牌责任感，比那些只会甩锅的品牌强太多了！"
+        ];
+        
+        const emojis = ["🙏", "👍", "❤️", "🔥", "👏", "💯", "🤔", "😊", "🤝", "✨", "⚠️", "🚀"];
+        
+        // 更丰富的生成逻辑
+        function getRandomTime() {
+            const units = ["分钟", "小时", "天", "周", "月"];
+            const values = [
+                Math.floor(Math.random()*60),
+                Math.floor(Math.random()*24),
+                Math.floor(Math.random()*30),
+                Math.floor(Math.random()*4),
+                Math.floor(Math.random()*12)
+            ];
+            const unit = units[Math.floor(Math.random()*5)];
+            
+            return `${values[units.indexOf(unit)]}${unit}前`;
+        }
+        
+        function getRandomLikeCount() {
+            const counts = [0, 12, 56, 128, 342, 1024, 3586];
+            return counts[Math.floor(Math.random()*counts.length)];
+        }
+        
+        function getRandomUsername() {
+            const name = usernames[Math.floor(Math.random()*usernames.length)];
+            const suffix = suffixes[Math.floor(Math.random()*suffixes.length)];
+            return name + suffix;
+        }
+
+        // 生成50条评论，其中3条热门评论
+        for (let i = 0; i < 50; i++) {
+            const username = getRandomUsername();
+            const time = getRandomTime();
+            const likes = getRandomLikeCount();
+            const content = positiveTemplates[Math.floor(Math.random()*positiveTemplates.length)];
+            
+            // 随机添加1-3个emoji
+            const finalContent = content + " " + 
+                emojis[Math.floor(Math.random()*emojis.length)] + 
+                (Math.random() > 0.5 ? emojis[Math.floor(Math.random()*emojis.length)] : "") +
+                (Math.random() > 0.3 ? emojis[Math.floor(Math.random()*emojis.length)] : "");
+            
+            // 热门标识
+            const isHot = i < 3 && likes > 1000;
+            
+            comments.push(`
+                <div class="comment-card ${isHot ? 'pinned-comment' : ''}">
+                    ${isHot ? '<div class="pinned-sign">置顶</div>' : ''}
+                    <div class="comment-user">
+                        <div class="avatar">${username.charAt(0)}</div>
+                        <div class="user-info">
+                            <h3 class="username">
+                                ${username}
+                                ${Math.random() > 0.8 ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}
+                            </h3>
+                            <p class="user-handle">@user_${Math.floor(Math.random()*10000)}</p>
+                        </div>
+                        <div class="comment-time">${time}</div>
+                    </div>
+                    <div class="comment-text">${finalContent}</div>
+                    <div class="comment-actions">
+                        <div class="action-btn">
+                            <i class="far fa-comment action-icon"></i>
+                            <span>${Math.floor(Math.random()*10)}</span>
+                        </div>
+                        <div class="action-btn">
+                            <i class="fas fa-retweet action-icon"></i>
+                            <span>${Math.floor(Math.random()*5)}</span>
+                        </div>
+                        <div class="action-btn">
+                            <i class="far fa-heart action-icon"></i>
+                            <span class="like-count">${likes}</span>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        // 按点赞数排序（置顶在最前）
+        document.getElementById('comments').innerHTML = comments.join('');
+    </script>
+</body>
+</html>
