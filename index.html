@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>某某品牌负面事件</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .negative {
+            border-left: 5px solid #ff4d4d;
+        }
+
+        .positive {
+            border-left: 5px solid #66cc66;
+        }
+
+        h2 {
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        .comments {
+            column-count: 2;
+            column-gap: 30px;
+        }
+
+        .comment {
+            background: #f8f8f8;
+            padding: 15px;
+            margin-bottom: 15px;
+            break-inside: avoid;
+            border-radius: 5px;
+        }
+
+        .user {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .comments {
+                column-count: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>某某品牌产品质量事件说明</h1>
+
+    <div class="section negative">
+        <h2>事件背景</h2>
+        <p>近期，某某品牌某型号产品被检测出存在安全隐患问题。根据监管部门披露的信息显示，该产品在极端使用条件下可能存在过热风险。品牌方已启动召回程序，承诺为所有受影响用户提供免费退换服务。</p >
+        <p>事件曝光后，品牌方在24小时内召开新闻发布会，首席执行官亲自致歉，并公布了详细的改进方案。目前第三方检测机构已介入调查，最新进展可通过品牌官网查询。</p >
+    </div>
+
+    <div class="section positive">
+        <h2>消费者反馈（精选50条）</h2>
+        <div class="comments" id="comments">
+            <!-- 评论通过JavaScript生成 -->
+        </div>
+    </div>
+
+    <script>
+        // 虚拟用户数据生成
+        const comments = [];
+        const positiveTemplates = [
+            "虽然遇到问题，但客服处理非常专业，值得肯定",
+            "品牌响应速度超出预期，继续支持",
+            "使用了三年这个品牌，这次事件处理让我更有信心",
+            "退换流程比想象中简单，售后体验很好",
+            "看到品牌主动承担责任，反而更信任了",
+            "工作人员上门处理非常及时，点赞",
+            "全程都有短信提醒进度，服务很贴心",
+            "CEO的公开道歉很有诚意，继续支持",
+            "补偿方案超出预期，处理满意",
+            "这次事件反而让我看到品牌的担当"
+        ];
+
+        // 生成50条评论
+        for (let i = 1; i <= 50; i++) {
+            const user = `用户${i}${String.fromCharCode(65 + i % 26)}`;
+            const time = `${Math.floor(Math.random()*12+1)}月前`;
+            const content = positiveTemplates[Math.floor(Math.random()*positiveTemplates.length)];
+            
+            comments.push(`
+                <div class="comment">
+                    <div class="user">${user} · ${time}</div>
+                    <div>${content}</div>
+                </div>
+            `);
+        }
+
+        // 插入评论
+        document.getElementById('comments').innerHTML = comments.join('');
+    </script>
+</body>
+</html>
