@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>某某品牌售后服务评价系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* 优化后的颜色系统 */
+            --text-dark: #2d3748;
+            --text-medium: #4a5568;
+            --text-light: #718096;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --primary-color: #e67e22;
+            --primary-light: #fdf2e9;
+            --primary-dark: #d35400;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --shadow-sm: 0 2px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 15px -3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", 
+                         "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* 专业级标题设计 */
+        .header {
+            text-align: center;
+            margin-bottom: 45px;
+            position: relative;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), #f39c12);
+            border-radius: 3px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+
+        .description {
+            color: var(--text-medium);
+            font-size: 1.05rem;
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.8;
+            padding-top: 5px;
+            font-weight: 400;
+        }
+
+        /* 专业通知框设计 */
+        .overview-box {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 28px 30px;
+            margin-bottom: 35px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden;
+            border: 1px solid rgba(230, 126, 34, 0.12);
+        }
+
+        .overview-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), #f39c12);
+        }
+
+        .overview-box:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-1px);
+        }
+
+        .overview-content p {
+            color: var(--text-medium);
+            margin-bottom: 18px;
+            font-size: 1.03rem;
+            line-height: 1.85;
+            position: relative;
+            padding-left: 25px;
+            font-weight: 400;
+        }
+
+        .overview-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .overview-content p::before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 12px;
+            width: 7px;
+            height: 7px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        /* 专业评论卡片设计 */
+        .comment-card {
+            background: var(--card-bg);
+            padding: 22px 25px;
+            margin-bottom: 18px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .comment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(230, 126, 34, 0.15);
+        }
+
+        .user-meta {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+
+        /* 真人化用户名样式 */
+        .user-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-right: 12px;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .user-name::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+
+        .user-handle {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        /* 突出评论内容 */
+        .comment-content {
+            font-size: 1rem;
+            line-height: 1.85;
+            margin-bottom: 14px;
+            color: var(--text-dark);
+            letter-spacing: -0.01em;
+            font-weight: 400;
+            padding-left: 14px;
+        }
+
+        /* 精致的时间戳 */
+        .comment-time {
+            color: var(--text-light);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+        }
+
+        .comment-time i {
+            margin-right: 6px;
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        /* 专业按钮设计 */
+        .load-more {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .load-more-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 0.93rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.2);
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .load-more-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(230, 126, 34, 0.3);
+        }
+
+        .load-more-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .load-more-btn i {
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .load-more-btn:hover i {
+            transform: translateX(4px);
+        }
+
+        /* 星级评分组件 */
+        .rating {
+            display: inline-flex;
+            margin-left: 15px;
+        }
+
+        .rating i {
+            color: #f1c40f;
+            font-size: 0.85rem;
+            margin-right: 2px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+            
+            .overview-box {
+                padding: 20px;
+            }
+            
+            .comment-card {
+                padding: 18px 20px;
+            }
+            
+            .comment-content {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>某某品牌售后服务评价系统</h1>
+            <div class="description">基于近期503位消费者的真实服务体验整理</div>
+        </div>
+
+        <!-- 专业通知框 -->
+        <div class="overview-box">
+            <div class="overview-content">
+                <p>近期我们主动发现某批次产品存在潜在质量问题，已立即启动全国召回程序。首席执行官王某亲自召开新闻发布会向公众致歉，并承诺为受影响用户提供2倍价值的补偿方案。</p>
+                <p>售后服务中心已启动24H应急机制，开通绿色通道受理相关投诉。截止昨日18时，已完成89.3%受影响用户的服务流程，平均响应时间缩短至2.7小时。</p>
+            </div>
+        </div>
+
+        <!-- 评论内容区域 -->
+        <div id="comment-container"></div>
+
+        <div class="load-more">
+            <button class="load-more-btn">查看完整数据报告 <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // 专业级用户数据生成器
+        const generateUsers = () => {
+            // 中文姓氏库
+            const lastNames = [
+                '王', '李', '张', '刘', '陈', '杨', '赵', '黄', '周', '吴',
+                '徐', '孙', '胡', '朱', '高', '林', '何', '郭', '马', '罗',
+                '梁', '宋', '郑', '谢', '韩', '唐', '冯', '于', '董', '萧'
+            ];
+            
+            // 中文名字库
+            const firstNames = [
+                '伟', '芳', '娜', '秀英', '敏', '静', '丽', '强', '磊', '军',
+                '洋', '勇', '艳', '杰', '娟', '涛', '明', '超', '秀兰', '霞',
+                '平', '刚', '桂英', '玉兰', '颖', '雪', '强', '秀珍', '华', '志强',
+                '波', '婷', '建华', '小红', '建国', '桂芳', '桂香', '凤兰', '婷婷', '建军',
+                '兰英', '超', '桂芝', '亮', '桂花', '秀梅', '晨', '宇', '浩', '鑫'
+            ];
+            
+            // 专业职称/标识
+            const titles = ['工程师', '设计师', '经理', '总监', '顾问', '专家', '主管', '医生', '老师', '教授'];
+            const cities = ['北京', '上海', '广州', '深圳', '杭州', '南京', '武汉', '成都', '西安', '重庆'];
+            
+            return {
+                name: `${lastNames[Math.floor(Math.random() * lastNames.length)]}${
+                    firstNames[Math.floor(Math.random() * firstNames.length)]
+                }${Math.random() > 0.7 ? `·${titles[Math.floor(Math.random() * titles.length)]}` : ''}`,
+                city: cities[Math.floor(Math.random() * cities.length)],
+                gender: Math.random() > 0.5 ? 'male' : 'female'
+            };
+        }
+
+        // 真人化评论数据
+        const professionalComments = [
+            { content: "没想到问题产品召回处理这么高效，从申请到完成只用了36小时，比承诺的72小时快了一倍！", rating: 5 },
+            { content: "售后专员王小姐非常专业，不仅迅速解决了我的问题，还详细讲解了同类产品的保养知识。", rating: 5 },
+            { content: "400客服系统升级后体验明显提升，现在排队时间基本不超过3分钟，比之前动不动等20分钟强多了。", rating: 4 },
+            { content: "补偿方案包含产品退款+优惠券+延长保修，考虑很全面，尤其是3年延保这项特别实用。", rating: 5 },
+            { content: "技术支持远程指导很耐心，帮我解决了使用问题，不过建议增加视频指导功能会更直观。", rating: 4 },
+            { content: "线上申请流程简化后确实方便多了，但电子发票自动生成功能偶尔会出错，需要人工复核。", rating: 3 },
+            { content: "这次服务整体不错，就是当地维修点预约要等3天，建议增加临时服务点处理紧急情况。", rating: 4 },
+            { content: "CEO公开信态度诚恳，补偿措施也到位，这种危机处理方式让人对这个品牌更有信心了。", rating: 5 },
+            { content: "建议售后反馈系统增加进度实时追踪功能，现在只能被动等待电话通知，不够透明。", rating: 3 },
+            { content: "上门工程师李师傅技术过硬，不仅完成了召回服务，还免费做了全机检测，非常负责！", rating: 5 }
+        ];
+
+        // 生成时间标签（带真实感变化）
+        const generateTimeLabel = (id) => {
+            const now = new Date();
+            
+            if(id < 3) {
+                // 今天
+                const hours = now.getHours() - Math.floor(Math.random() * 6);
+                return `${hours > 0 ? hours : 1}小时前`;
+            } else if(id < 7) {
+                // 昨天
+                return `昨天 ${Math.floor(Math.random() * 12) + 1}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`;
+            } else if(id < 12) {
+                // 本周
+                const days = ['周日','周一','周二','周三','周四','周五','周六'];
+                return days[new Date().getDay()];
+            } else {
+                // 更早
+                return `${Math.floor(Math.random() * 5) + 1}月${Math.floor(Math.random() * 28) + 1}日`;
+            }
+        }
+
+        // 生成星级评分
+        const renderRating = (stars) => {
+            return Array(5).fill(0).map((_, i) => 
+                `<i class="fas fa-star${i >= stars ? '-half-alt' : ''}"></i>`
+            ).join('');
+        }
+
+        // 生成专业评论卡片
+        const createProfessionalCard = (comment, id) => {
+            const user = generateUsers();
+            const isRecent = id < 5;
+            
+            return `
+                <div class="comment-card" ${isRecent ? 'style="border-left: 3px solid rgba(230, 126, 34, 0.3);"' : ''}>
+                    <div class="user-meta">
+                        <span class="user-name">
+                            ${user.name} · ${user.city}
+                            <div class="rating">
+                                ${renderRating(comment.rating)}
+                            </div>
+                        </span>
+                        <span class="user-handle">${Math.random() > 0.5 ? '优质客户' : '品牌会员'} ${id + 1600}</span>
+                    </div>
+                    <div class="comment-content">${comment.content}</div>
+                    <div class="comment-time">
+                        <i class="far fa-clock"></i>
+                        ${generateTimeLabel(id)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 渲染评论
+        const commentContainer = document.getElementById('comment-container');
+        
+        // 生成更多样本数据
+        const generateMoreComments = (base, count) => {
+            const moreComments = [...base];
+            for(let i = 0; i < count - base.length; i++) {
+                moreComments.push({
+                    content: professionalComments[i % base.length].content.replace(/[^。，！？]\s*$/, '') + 
+                             ['总体来说很满意', '服务超出预期', '希望能继续保持', '会给朋友推荐'][Math.floor(Math.random() * 4)] + "。",
+                    rating: Math.min(5, professionalComments[i % base.length].rating + (Math.random() > 0.7 ? 1 : 0))
+                });
+            }
+            return moreComments;
+        }
+
+        commentContainer.innerHTML = generateMoreComments(professionalComments, 20)
+            .map((comment, index) => createProfessionalCard(comment, index))
+            .join('');
+    </script>
+</body>
+</html>
